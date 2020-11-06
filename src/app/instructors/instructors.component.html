@@ -1,0 +1,8 @@
+<div class="instructor">
+    <ul>
+		<li *ngFor="let instructor of instructors">
+			<h4>{{instructor.name}} {{instructor.surname}} <button (click)="goToInstructor(instructor)">Перейти</button></h4>
+			<p>Опыт: {{instructor.experience}}<p>
+		</li>
+	</ul>
+</div>

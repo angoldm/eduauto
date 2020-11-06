@@ -1,0 +1,42 @@
+<div class="example-container mat-elevation-z8">
+  <div class="example-loading-shade"
+       *ngIf="isLoadingResults || isRateLimitReached">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+      Конец списка инструкторов
+    </div>
+  </div>
+
+  <div class="example-table-container">
+    <table mat-table [dataSource]="data" class="example-table"
+           matSort matSortActive="name" matSortDisableClear matSortDirection="desc">
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ФИО</th>
+        <td mat-cell *matCellDef="let row"><a routerLink = "/instructor/{{row.id}}">{{row.name}} {{row.surname}}</a></td>
+      </ng-container>
+
+      <!-- school Column -->
+      <ng-container matColumnDef="school">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Школа</th>
+        <td mat-cell *matCellDef="let row">{{row.school}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <mat-paginator #paginator
+      [length]="resultsLength"
+      [pageIndex]="0"
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+</div>

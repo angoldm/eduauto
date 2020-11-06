@@ -1,0 +1,31 @@
+<div class="instructor">
+	<h1>Инструктор {{instructor.surname}} {{instructor.name}} </h1>
+	<!--p>Ид. инструктора: {{instructor.id}}<p-->
+	<p>Опыт: {{instructor.experience}} лет<p>
+</div>
+
+	<h2>График
+		<label>
+			<input
+			  type='checkbox'
+			  [checked]='calendarVisible'
+			  (change)='handleCalendarToggle()'
+			/>
+			Календарь
+	  </label>
+	</h2>
+<div class='demo-app'>
+	<div class='demo-app-main'>
+		<full-calendar
+			*ngIf='calendarVisible'
+			[options]="calendarOptions">
+		</full-calendar>
+	</div>
+</div>
+<h2>Поездки ({{currentEvents.length}}):</h2>
+<ul>
+  <li *ngFor='let event of currentEvents'>
+	<b>{{event.startStr}}</b>
+	<i>{{event.title}}</i>
+  </li>
+</ul>

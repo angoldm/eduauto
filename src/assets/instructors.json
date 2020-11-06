@@ -1,0 +1,78 @@
+{ 
+    "instructors":
+    [{
+        "id": 1,
+        "name": "Рустем",
+        "surname": "Арсланов",
+        "experience": 20,
+        "school": "ООО \"Кабриолет\""
+    },{
+        "id": 2,
+        "name": "Вано",
+        "surname": "Ваньков",
+        "experience": 15,
+        "school": "ООО \"12345\""
+    },{
+        "id": 3,
+        "name": "Константин",
+        "surname": "Касьянов",
+        "experience": 25,
+        "school": "ООО \"Кабриолет\""
+    },{
+        "id": 4,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО \"Four\""
+    },{
+        "id": 5,
+        "name": "Five",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО \"Кабриолет\""
+    },{
+        "id": 6,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО \"Кабриолет\""
+    },{
+        "id": 7,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО"
+    },{
+        "id": 8,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО"
+    },{
+        "id": 9,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО"
+    },{
+        "id": 10,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО"
+    },{
+        "id": 11,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО"
+    },{
+        "id": 12,
+        "name": "Four",
+        "surname": "",
+        "experience": 25,
+        "school": "ООО"
+    }
+    ],
+    "total_count":12
+}

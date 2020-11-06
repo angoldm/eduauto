@@ -1,0 +1,9 @@
+{ 
+    "instructor":
+    {
+        "id": 1,
+        "name": "Рустем",
+        "surname": "Арсланов",
+        "experience": 21
+    }
+}

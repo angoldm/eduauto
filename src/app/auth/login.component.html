@@ -1,0 +1,15 @@
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div style='float: left;'>
+    <div>
+      <label>Логин</label>
+      <input type="text" formControlName="login" required placeholder="Имя пользователя">
+    </div>
+    <div>
+      <label>Пароль</label>
+      <input type="password" formControlName="password" required placeholder="Пароль">
+    </div>
+  </div>
+  <div>
+    <button type="submit">Войти</button>
+  </div>
+</form>

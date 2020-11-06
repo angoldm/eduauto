@@ -1,0 +1,25 @@
+a {
+	outline: none;
+	text-decoration: none;
+	padding: 5px 10px 0;
+	font-size: 16pt;
+}
+
+a:visited {
+	color:black;
+}
+.active-link {
+	color:white;
+}
+
+a.active-link:visited {
+	color:white;
+}
+
+table {
+  width: 100%;
+}
+
+td.topmenu {
+	//width: 70%;
+}
