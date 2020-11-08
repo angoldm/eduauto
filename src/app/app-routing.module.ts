@@ -21,7 +21,7 @@ const routes: Routes = [
 	{ path: 'instrlist', component: InstructorsComponent },
 	{ path: 'instructor/:id', component: InstructorComponent },
 	{ path: 'profile/:id', component: ProfileComponent, data: {
-		breadcrumbs: 'Profile'
+		breadcrumbs: 'Профиль'
 		}},
     { path: 'login', component: LoginComponent },
     { path: 'contacts', redirectTo: '/', pathMatch: 'full' },
@@ -29,7 +29,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  declarations: [
+	HomeComponent,
+    ProfileComponent,
+	NotFoundComponent
+  ],
+  imports: [
+	  RouterModule.forRoot(routes)
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

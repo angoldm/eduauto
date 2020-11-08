@@ -9,6 +9,34 @@
       <a routerLink="/profile" mat-list-item href="/profile">Профиль</a>
       <!--a routerLink="/instrlist" mat-list-item href="/instrlist">Список</a-->
     </mat-nav-list>
+    <div class="inline">
+      <p>Город:&nbsp;</p>
+    </div>
+    <div class="inline">
+      <a *ngIf="!chCity" href="#" (click)="clickCity()">{{City}}</a>
+      <!--input #cityinput *ngIf="chCity" [(ngModel)]="City" (keyup.enter)="saveCity(cityinput.value)"-->
+
+      <form *ngIf="chCity" class="citylist-form">
+        <mat-form-field class="citylist-full-width">
+          <input type="text"
+            #cityinput
+            [(ngModel)]="City"
+            (keyup.enter)="saveCity(cityinput.value)"
+            (blur)="saveCity(cityinput.value)"
+            placeholder="Выберите город"
+            aria-label="город"
+            matInput
+            [formControl]="Citylist"
+            [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </div>
+
     <app-login></app-login>
   </mat-sidenav>
   <mat-sidenav-content>

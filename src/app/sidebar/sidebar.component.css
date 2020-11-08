@@ -15,3 +15,18 @@
   top: 0;
   z-index: 1;
 }
+
+.inline{
+  display:inline-block;
+  word-wrap: none;
+}
+
+.citylist-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.citylist-full-width {
+  width: 100%;
+}

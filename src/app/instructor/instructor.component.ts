@@ -16,6 +16,7 @@ export class InstructorComponent implements AfterViewInit, OnInit {
 
   instructor: Instructor;
   id: number;
+
   private subscription: Subscription;
   calendarVisible = true;
   calendarOptions: CalendarOptions = {
