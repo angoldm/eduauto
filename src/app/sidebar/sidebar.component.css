@@ -20,7 +20,9 @@
   display:inline-block;
   word-wrap: none;
 }
-
+.inline label{
+  float: left;
+}
 .citylist-form {
   min-width: 150px;
   max-width: 400px;
@@ -28,5 +30,6 @@
 }
 
 .citylist-full-width {
-  width: 100%;
+  /*width: 100%;*/
+  float: right;
 }
