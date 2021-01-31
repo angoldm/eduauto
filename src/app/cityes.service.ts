@@ -13,12 +13,12 @@ interface City {
 export class CityesService {
   constructor(private http: HttpClient) { }
   getCities(): Observable<string[]>{
-  const httpOptions = {
+  let httpOptions: Object = {
     headers: new HttpHeaders({
       /*Login: "test",
       Parol: "test",*/
-      /*Authorization: 'Basic dGVzdDp0ZXN0',*/
-      'Content-Type':  'text/plain',
+      Authorization: 'Basic dGVzdDp0ZXN0',
+      //'Content-Type':  'text/plain',
       //'Content-Type':  'application/json',
       /*'Access-Control-Allow-Origin': '*',
       "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT"*/
@@ -36,12 +36,17 @@ export class CityesService {
 'Sec-Fetch-User': '?1',
 'Upgrade-Insecure-Requests': '1',
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36'*/
-    })
+    }),
+
+    //responseType: 'text' as const
   };
-    return this.http.get<City>("https://app108060.1capp.net/Avtoshkola/hs/City/GetCity", httpOptions) //jsonp
+    return this.http.get<City>("/api/City/GetCity", httpOptions) //jsonp, httpOptions
     .pipe(
       map((data:any) => {
-        return data.name
+        return data.map((city: City) => {
+          return city.name
+        }
+        )
       })
     );
   }

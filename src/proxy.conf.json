@@ -1,0 +1,10 @@
+{
+    "/api": {
+      "target": "https://app108060.1capp.net/Avtoshkola/hs",
+      "secure": true,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/api": ""
+      }
+    }
+  }

@@ -23,7 +23,8 @@ const routes: Routes = [
 	{ path: 'profile/:id', component: ProfileComponent, data: {
 		breadcrumbs: 'Профиль'
 		}},
-    { path: 'login', component: LoginComponent },
+    //{ path: 'login', component: LoginComponent },
+    //{ path: 'login', redirectTo: 'https://app108060.1capp.net/Avtoshkola/hs/City/GetCity', pathMatch: 'full' },
     { path: 'contacts', redirectTo: '/', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent }
 ];

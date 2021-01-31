@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClientJsonpModule }   from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule, HTTP_INTERCEPTORS }   from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +16,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 import { FullCalendarModule } from '@fullcalendar/angular'; // the main connector. must go first
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
@@ -32,6 +34,8 @@ import { InstructorsComponent } from './instructors/instructors.component';
 import { InstructorstblComponent } from './instructorstbl/instructorstbl.component';
 import { ExampletblComponent } from './exampletbl/exampletbl.component';
 import { LoginComponent } from './auth/login.component';
+import { importType } from '@angular/compiler/src/output/output_ast';
+import { CommonInterceptor } from './common.interceptor'
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -70,9 +74,17 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     MatSortModule,
     MatProgressSpinnerModule,
     MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
     FullCalendarModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CommonInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

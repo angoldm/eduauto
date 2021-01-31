@@ -48,7 +48,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem("City") == null)
+    if (localStorage.getItem("City") == null || localStorage.getItem("City") == '')
       localStorage.setItem("City", "Уфа");
     this.City = localStorage.getItem("City");
     this.filteredOptions = this.Citylist.valueChanges

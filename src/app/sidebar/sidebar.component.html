@@ -7,6 +7,7 @@
     <mat-nav-list>
       <a routerLink="/instructors" mat-list-item href="/instructors">Инструкторы</a>
       <a routerLink="/profile" mat-list-item href="/profile">Профиль</a>
+      <!--a routerLink="/login" mat-list-item href="/login">Логин</a-->
       <!--a routerLink="/instrlist" mat-list-item href="/instrlist">Список</a-->
     </mat-nav-list>
     <div class="inline">
@@ -27,8 +28,8 @@
             aria-label="город"
             matInput
             [formControl]="Citylist"
-            [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
+            [matAutocomplete]="auto" />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
               {{option}}
             </mat-option>
