@@ -45,6 +45,7 @@ export class SidebarComponent implements OnInit {
 
   saveCity(value: string){
     localStorage.setItem("City", value);
+    this.chCity = false;
   }
 
   ngOnInit() {

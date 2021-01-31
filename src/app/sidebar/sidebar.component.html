@@ -11,9 +11,9 @@
       <!--a routerLink="/instrlist" mat-list-item href="/instrlist">Список</a-->
     </mat-nav-list>
     <div class="inline">
-      <p>Город:&nbsp;</p>
-    </div>
-    <div class="inline">
+      <div class="inline">
+        <p>Город:&nbsp;</p>
+      </div>
       <a *ngIf="!chCity" href="#" (click)="clickCity()">{{City}}</a>
       <!--input #cityinput *ngIf="chCity" [(ngModel)]="City" (keyup.enter)="saveCity(cityinput.value)"-->
 
