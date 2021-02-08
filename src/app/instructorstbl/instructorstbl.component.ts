@@ -15,7 +15,7 @@ import { InstructorsService } from '../instructors/instructors.service';
 })
 export class InstructorstblComponent implements AfterViewInit, OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['surname', 'school'];
+  displayedColumns = ['name', 'school', 'city'];
   exampleDatabase: InstructorsService | null;
   data: InstructorstblItem[] = [];
 
@@ -61,7 +61,7 @@ export class InstructorstblComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;*/
   }
-  
+
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.

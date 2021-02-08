@@ -21,9 +21,11 @@ export class CommonInterceptor implements HttpInterceptor {
     request = request.clone({
       setHeaders: {
         //authorization: localStorage.getItem("token")
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-        'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding, X-Auth-Token, content-type'
+        //'Access-Control-Allow-Origin': '*',
+        //'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        //'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding, X-Auth-Token, content-type'
+        Login: 'Test',
+        Parol: 'Test'
       }
     });
       return next.handle(request)

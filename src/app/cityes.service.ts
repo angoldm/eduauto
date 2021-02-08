@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpClientJsonpModule} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { map, take, skip } from 'rxjs/operators';
+import { environment } from './../environments/environment';
 
 interface City {
   result: boolean;
@@ -11,7 +12,9 @@ interface City {
   providedIn: 'root'
 })
 export class CityesService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    console.log('environment.apiUrl = "'+environment.apiUrl+'"');
+  }
   getCities(): Observable<string[]>{
   let httpOptions: Object = {
     headers: new HttpHeaders({
@@ -37,10 +40,10 @@ export class CityesService {
 'Upgrade-Insecure-Requests': '1',
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36'*/
     }),
-
     //responseType: 'text' as const
   };
-    return this.http.get<City>("/api/City/GetCity", httpOptions) //jsonp, httpOptions
+  let httpUrl = environment.apiUrl + 'City/GetCity';
+  return this.http.get<City>(httpUrl, httpOptions) //jsonp, httpOptions
     .pipe(
       map((data:any) => {
         return data.map((city: City) => {
