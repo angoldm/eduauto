@@ -1,19 +1,24 @@
 import {HttpClient} from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit, Injectable, Inject, OnDestroy } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import {merge, Observable, of as observableOf} from 'rxjs';
+import {merge, Observable, of as observableOf, of} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+//import { TransferState, makeStateKey } from '@angular/platform-browser';
+//import { isPlatformServer } from '@angular/common';
+//import { PLATFORM_ID } from '@angular/core';
 import { InstructorstblItem, InstructorsInfo } from '../instructors/instructors.service';
 import { InstructorsService } from '../instructors/instructors.service';
+
+//const INSTRS_KEY = makeStateKey('instructors');
 
 @Component({
   selector: 'instructorstbl',
   templateUrl: './instructorstbl.component.html',
   styleUrls: ['./instructorstbl.component.css']
 })
-export class InstructorstblComponent implements AfterViewInit, OnInit {
+export class InstructorstblComponent implements AfterViewInit, OnInit, OnDestroy {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'school', 'city'];
   exampleDatabase: InstructorsService | null;
@@ -27,20 +32,24 @@ export class InstructorstblComponent implements AfterViewInit, OnInit {
   //@ViewChild(MatTable) table: MatTable<InstructorstblItem>;
   //dataSource: InstructorstblDataSource;
 
-  constructor(private instrService: InstructorsService) {}
+  constructor(private instrService: InstructorsService,
+    //@Inject(PLATFORM_ID) private platformId,
+    //private transferState: TransferState
+  ) {}
 
   ngAfterViewInit() {
-    //this.exampleDatabase = new ExampleHttpDatabase(this._httpClient);
+    setTimeout(() => {
+      //this.exampleDatabase = new ExampleHttpDatabase(this._httpClient);
+      // If the user changes the sort order, reset back to the first page.
+      this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    merge(this.sort.sortChange, this.paginator.page)
+      merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.instrService!.getInstructors(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+            return this.instrService!.getInstructors(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+          //}
         }),
         map(data => {
           // Flip flag to show that loading has finished.
@@ -56,10 +65,13 @@ export class InstructorstblComponent implements AfterViewInit, OnInit {
           this.isRateLimitReached = true;
           return observableOf([]);
         })
-      ).subscribe(data => this.data = data);
+      ).subscribe(data => {
+        this.data = data;
+      });
     /*this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;*/
+    })
   }
 
   /**
@@ -93,8 +105,14 @@ export class InstructorstblComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    /*this.instrService.getInstructors().subscribe(data => {
+      console.log(data);
+    })*/
     //this.dataSource = new InstructorstblDataSource(this.instrService);
-    //this.dataSource = new InstructorstblDataSource(this.instrService);
+  }
+
+  ngOnDestroy(){
+    this.sort.sortChange.unsubscribe();
   }
 }
 

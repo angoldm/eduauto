@@ -25,7 +25,8 @@ export class CommonInterceptor implements HttpInterceptor {
         //'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
         //'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding, X-Auth-Token, content-type'
         Login: 'Test',
-        Parol: 'Test'
+        Parol: 'Test',
+        Authorization: 'Basic dGVzdDp0ZXN0'
       }
     });
       return next.handle(request)

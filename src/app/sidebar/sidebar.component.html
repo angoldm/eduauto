@@ -13,14 +13,14 @@
     <div class="inline">
       <form class="citylist-form">
         <label style="float: left;">Город:</label>
-        <a *ngIf="!chCity" href="#" (click)="clickCity()">{{City}}</a>
+        <a *ngIf="!chCity" href="#" (click)="clickCity()">{{Citylist.value}}</a>
         <!--input #cityinput *ngIf="chCity" [(ngModel)]="City" (keyup.enter)="saveCity(cityinput.value)"-->
 
         <mat-form-field *ngIf="chCity" class="citylist-full-width">
           <input type="text"
             #cityinput
-            [(ngModel)]="City"
             (keyup.enter)="saveCity(cityinput.value)"
+            (focus)="onCityFocus(cityinput.value)"
             placeholder="Выберите и нажмите Enter"
             aria-label="город"
             matInput

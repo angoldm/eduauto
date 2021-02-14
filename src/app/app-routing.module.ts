@@ -36,7 +36,7 @@ const routes: Routes = [
 	NotFoundComponent
   ],
   imports: [
-	  RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })
+	  RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', initialNavigation: 'enabled' })
   ],
   exports: [RouterModule]
 })

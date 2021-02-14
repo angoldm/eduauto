@@ -1,8 +1,11 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()">
   <div style='float: left;'>
     <div>
-      <label>Логин</label>
-      <input type="text" formControlName="login" required placeholder="Имя пользователя">
+      <mat-form-field appearance="outline">
+        <mat-label>Имя пользователя</mat-label>
+          <input type="text" matInput formControlName="username" required placeholder="Логин (номер телефона)">
+          <!--input type="text" matInput [formControl]="login" required placeholder="Имя пользователя"-->
+      </mat-form-field>
     </div>
     <div>
       <label>Пароль</label>

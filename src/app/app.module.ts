@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -56,7 +56,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     LoginComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -76,7 +76,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    FullCalendarModule
+    FullCalendarModule,
+    BrowserTransferStateModule
   ],
   providers: [
     {
