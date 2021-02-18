@@ -36,6 +36,9 @@ import { ExampletblComponent } from './exampletbl/exampletbl.component';
 import { LoginComponent } from './auth/login.component';
 import { importType } from '@angular/compiler/src/output/output_ast';
 import { CommonInterceptor } from './common.interceptor'
+import { JwtInterceptor } from './auth/jwt.interceptor'
+import { ErrorInterceptor } from './auth/error.interceptor'
+import { CookieService } from './cookie.service';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -80,11 +83,11 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     BrowserTransferStateModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CommonInterceptor,
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    //{ provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true },
+    //{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    CookieService,
+    { provide: 'req', useValue: null}
   ],
   bootstrap: [AppComponent]
 })

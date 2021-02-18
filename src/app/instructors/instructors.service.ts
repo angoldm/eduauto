@@ -133,8 +133,8 @@ export class InstructorsService {
       //return this.http.get('assets/instructors.json').pipe(
       //return this.http.get('/api/Instructors/GetInstructors').pipe(
       //return this.http.get('https://app108060.1capp.net/Avtoshkola/hs/Instructors/GetInstructors').pipe(
-      let instrUrl = environment.apiUrl + 'Instructors/GetInstructors';
-      return this.http.get(instrUrl).pipe(
+      //let instrUrl = environment.apiUrl + 'Instructors/GetInstructors';
+      return this.http.get(`${environment.apiUrl}Instructors/GetInstructors`).pipe(
         map((data:any) => {
           //let instructorsList = data["instructors"];
           //return instructorsList.map(function(instructor:any) {

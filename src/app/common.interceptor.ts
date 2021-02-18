@@ -24,13 +24,13 @@ export class CommonInterceptor implements HttpInterceptor {
         //'Access-Control-Allow-Origin': '*',
         //'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
         //'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding, X-Auth-Token, content-type'
-        Login: 'Test',
-        Parol: 'Test',
+        //Login: 'Test',
+        //Parol: 'Test',
         Authorization: 'Basic dGVzdDp0ZXN0'
       }
     });
       return next.handle(request)
-      .pipe(
+      /*.pipe(
         tap(
           // Succeeds when there is a response; ignore other events
           event => ok = event instanceof HttpResponse ? 'succeeded' : '',
@@ -45,6 +45,6 @@ export class CommonInterceptor implements HttpInterceptor {
           //this.messenger.add(msg);
           console.log(msg);
         })
-      );
+      );*/
   }
 }
