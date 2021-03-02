@@ -1,5 +1,6 @@
-import {HttpClient} from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit, OnInit, Injectable, Inject, OnDestroy } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+//import {HttpClient} from '@angular/common/http';
+import { Component, ViewChild, AfterViewInit, OnInit, Injectable, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -33,7 +34,7 @@ export class InstructorstblComponent implements AfterViewInit, OnInit, OnDestroy
   //dataSource: InstructorstblDataSource;
 
   constructor(private instrService: InstructorsService,
-    //@Inject(PLATFORM_ID) private platformId,
+    @Inject(PLATFORM_ID) private platformId,
     //private transferState: TransferState
   ) {}
 
@@ -109,6 +110,18 @@ export class InstructorstblComponent implements AfterViewInit, OnInit, OnDestroy
       console.log(data);
     })*/
     //this.dataSource = new InstructorstblDataSource(this.instrService);
+    if (this.instrService.getTransferState() == null) {
+      if (isPlatformServer(this.platformId)){
+        //location.reload();
+        console.log("Instructorstbl server ngOnInit");
+        this.instrService.getAllInstructors();
+      } else if (localStorage.getItem('Instructors_reloaded') == null) {
+        localStorage.setItem('Instructors_reloaded', '');
+        location.reload();
+      } else {
+        localStorage.removeItem('Instructors_reloaded');
+      }
+    }
   }
 
   ngOnDestroy(){

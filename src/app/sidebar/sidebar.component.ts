@@ -9,6 +9,7 @@ import { CityesService } from '../cityes.service'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 //import { CookieService } from '../cookie.service';
 import { CookieService } from 'ngx-cookie-service';
+import { InstructorsService } from '../instructors/instructors.service';
 
 //const CITYES_KEY = makeStateKey('cities');
 
@@ -39,6 +40,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(private breakpointObserver: BreakpointObserver,
     private CityesService: CityesService,
+    private instrService: InstructorsService,
     @Inject(PLATFORM_ID) private platformId,
     private cookieService: CookieService
     //private state: TransferState
@@ -56,6 +58,12 @@ export class SidebarComponent implements OnInit {
     this.chCity = false;
   }
 
+  clickInstructors() {
+    if (isPlatformBrowser(this.platformId) && this.instrService.getTransferState() == null){
+      location.reload();
+    }
+  }
+
   ngOnInit() {
     //this.options = this.state.get(CITYES_KEY, null as any);
     //if (!this.options) {
@@ -63,9 +71,9 @@ export class SidebarComponent implements OnInit {
         //console.log(data);
         this.options = data;
         //this.state.set(CITYES_KEY, data as any);
-        this.cookieService.set('test', 'test');
+        /*this.cookieService.set('test', 'test');
         const test = this.cookieService.get('test');
-        console.log(`Cookie test = "${test}"`);
+        console.log(`Cookie test = "${test}"`);*/
       })
     //}
     if (isPlatformBrowser(this.platformId)) {

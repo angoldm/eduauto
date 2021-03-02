@@ -18,7 +18,7 @@ export class JwtInterceptor implements HttpInterceptor {
                 }
             });
         }
-        console.log(`server currentUser = ${currentUser}`);
+        //console.log(`server currentUserToken = ${currentUser.token}`);
 
         return next.handle(request);
     }

@@ -6,14 +6,15 @@ import { REQUEST } from '@nguniversal/express-engine/tokens';
 
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
-import { CookieService } from './cookie.service';
+import { CookieServer } from './cookie.service';
 
 @Injectable()
 export class RequestCookies {
     constructor(@Optional() @Inject(REQUEST) private request: Request) {}
 
     get cookies() {
-        return !!this.request.headers.cookie ? this.request.headers.cookie : null;
+      //console.log(`Server cookies from Server module = ${this.request.headers.cookie}`);
+      return !!this.request.headers.cookie ? this.request.headers.cookie : null;
     }
 }
 
@@ -24,7 +25,7 @@ export class RequestCookies {
     ServerTransferStateModule
   ],
   providers: [
-    CookieService,
+    CookieServer,
     { provide: 'req', useClass: RequestCookies }
 ],
   bootstrap: [AppComponent],

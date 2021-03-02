@@ -5,7 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 import { ThrowStmt } from '@angular/compiler';
 import { TransferState, makeStateKey } from '@angular/platform-browser';
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 const INSTRS_KEY = makeStateKey('instructors');
 
@@ -90,7 +90,7 @@ export class InstructorsService {
         tap(instr => {
           if (isPlatformServer(this.platformId)) {
               this.transferState.set(INSTRS_KEY, instr);
-              console.log("Запрос от сервера: $instr");
+              //console.log("Запрос от сервера: $instr");
           }
         })
       );
@@ -124,16 +124,22 @@ export class InstructorsService {
       );
   }
 
-  private getAllInstructors() : Observable<InstructorsInfo> {
-    if (this.transferState.hasKey(INSTRS_KEY)) {
-      const instrs = this.transferState.get(INSTRS_KEY, null);
-      //this.transferState.remove(INSTRS_KEY);
-      return of(instrs);
+  getAllInstructors() : Observable<InstructorsInfo> {
+    if (isPlatformBrowser(this.platformId)) {
+      //if (this.transferState.hasKey(INSTRS_KEY)) {
+        //const instrs = this.transferState.get(INSTRS_KEY, null);
+        //this.transferState.remove(INSTRS_KEY);
+
+        return of(this.transferState.get(INSTRS_KEY, null));
+      /*} /*else {
+        location.reload();
+      }*/
     } else {
       //return this.http.get('assets/instructors.json').pipe(
       //return this.http.get('/api/Instructors/GetInstructors').pipe(
       //return this.http.get('https://app108060.1capp.net/Avtoshkola/hs/Instructors/GetInstructors').pipe(
       //let instrUrl = environment.apiUrl + 'Instructors/GetInstructors';
+      this.transferState.set(INSTRS_KEY, null);
       return this.http.get(`${environment.apiUrl}Instructors/GetInstructors`).pipe(
         map((data:any) => {
           //let instructorsList = data["instructors"];
@@ -157,13 +163,17 @@ export class InstructorsService {
           };
         }),
         tap(instr => {
-          if (isPlatformServer(this.platformId)) {
+          //if (isPlatformServer(this.platformId)) {
               this.transferState.set(INSTRS_KEY, instr);
               console.log("Запрос от сервера: $instr");
-          }
+          //}
         })
       );
     }
+  }
+
+  getTransferState(){
+    return this.transferState.get(INSTRS_KEY, null);
   }
 
   private getSortedData(data: InstructorstblItem[]) {

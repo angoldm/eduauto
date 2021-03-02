@@ -4,11 +4,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { NotFoundComponent }   from './not-found.component';
 import { ProfileComponent } from './profile.component';
-import { InstructorComponent } from './instructor/instructor.component';
-import { InstructorstblComponent } from './instructorstbl/instructorstbl.component';
-import { InstructorsComponent } from './instructors/instructors.component';
-import { ExampletblComponent } from './exampletbl/exampletbl.component';
-import { LoginComponent } from './auth/login.component';
+//import { InstructorComponent } from './instructor/instructor.component';
+//import { InstructorstblComponent } from './instructorstbl/instructorstbl.component';
+//import { InstructorsComponent } from './instructors/instructors.component';
+//import { ExampletblComponent } from './exampletbl/exampletbl.component';
+//import { LoginComponent } from './auth/login.component';
 
 const routes: Routes = [
     {
@@ -17,9 +17,12 @@ const routes: Routes = [
 		]
 	},
 	{ path: 'profile', component: ProfileComponent },
-	{ path: 'instructors', component: InstructorstblComponent },
-	{ path: 'instrlist', component: InstructorsComponent },
-	{ path: 'instructor/:id', component: InstructorComponent },
+	//{ path: 'instructors', component: InstructorstblComponent },
+	{ path: 'instructors', loadChildren: () => import('./instructorstbl/instructorstbl.module').then(m => m.InstructorstblModule) },
+	//{ path: 'instrlist', component: InstructorsComponent },
+	//{ path: 'exampletbl', component: ExampletblComponent },
+	//{ path: 'instructor/:id', component: InstructorComponent },
+	{ path: 'instructor/:id', loadChildren: () => import('./instructor/instructor.module').then(m => m.InstructorModule) },
 	{ path: 'profile/:id', component: ProfileComponent, data: {
 		breadcrumbs: 'Профиль'
 		}},
@@ -31,9 +34,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-	HomeComponent,
-    ProfileComponent,
-	NotFoundComponent
   ],
   imports: [
 	  RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', initialNavigation: 'enabled' })

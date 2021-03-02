@@ -9,8 +9,9 @@ import { PLATFORM_ID } from '@angular/core';
 import { User } from './user';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
-import { Request } from 'express';
+//import { REQUEST } from '@nguniversal/express-engine/tokens';
+//import { Request } from 'express';
+import { CookieServer } from '../cookie.service';
 
 const AUTH_KEY = makeStateKey('auth_data');
 
@@ -18,7 +19,7 @@ const AUTH_KEY = makeStateKey('auth_data');
 export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
-    private cookieStore: {};
+    //private cookieStore: {};
     currentUsertoken: string = '';
     currentUserInfo: User;
 
@@ -26,7 +27,8 @@ export class AuthenticationService {
         @Inject(PLATFORM_ID) private platformId,
         private transferState: TransferState,
         private cookieService: CookieService,
-        @Optional() @Inject(REQUEST) private request: Request,
+        private cookieServer: CookieServer,
+        //@Optional() @Inject(REQUEST) private request: Request,
     ) {
         //let currentUserJSON = isPlatformBrowser(this.platformId) ? localStorage.getItem('currentUser') : request.http.cookie
         let user: User = {
@@ -35,14 +37,17 @@ export class AuthenticationService {
             fio: '',
             token: ''
         };
-    if (isPlatformServer(this.platformId)) {
-            console.log(this.request.headers.cookie);
-            this.parseCookies(this.request.headers.cookie);
-            console.log(this.cookieStore);
-            console.log(this.getCookie('currentUser'));
-            user.token = this.getCookie('currentUserToken');
+        if (isPlatformServer(this.platformId)) {
+            //console.log(this.request.headers.cookie);
+            //this.parseCookies(this.request.headers.cookie);
+            //console.log(this.cookieStore);
+            //console.log(this.getCookie('currentUser'));
+            //user.token = this.getCookie('currentUserToken');
+            user.token = this.cookieServer.get('currentUserToken');
+            console.log(`Server currentUserToken = ${user.token}`);
         }
-        let currentUser:User = isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('currentUser')) : user;
+        //let currentUser:User = isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('currentUser')) : user;
+        let currentUser = user;
         /*let currentUserCookie = this.cookieService.get('currentUser');
         let currentUser = JSON.parse(currentUserCookie);*/
         this.currentUserSubject = new BehaviorSubject<User>(currentUser);
@@ -85,7 +90,8 @@ export class AuthenticationService {
             localStorage.setItem('currentUserToken', user.token);
             this.transferState.set(AUTH_KEY, JSON.stringify(user));
             this.cookieService.set('currentUser', JSON.stringify(user));
-            this.cookieService.set('currentUserToken', user.token);
+            //this.cookieService.set('currentUserToken', user.token);
+            this.cookieServer.set('currentUserToken', user.token);
             this.currentUserSubject.next(user);
             return of(user);
         }
@@ -96,7 +102,7 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
-    public parseCookies(cookies) {
+    /*public parseCookies(cookies) {
         this.cookieStore = {};
         if (!!cookies === false) { return; }
         let cookiesArr = cookies.split('; ');
@@ -104,9 +110,9 @@ export class AuthenticationService {
             const cookieArr = cookie.split('=');
             this.cookieStore[cookieArr[0]] = cookieArr[1];
         }
-    }
+    }*/
 
-    getCookie(key: string) {
+    /*getCookie(key: string) {
         return !!this.cookieStore[key] ? this.cookieStore[key] : null;
-    }
+    }*/
 }

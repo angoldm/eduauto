@@ -30,15 +30,15 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { InstructorComponent } from './instructor/instructor.component';
-import { InstructorsComponent } from './instructors/instructors.component';
+//import { InstructorsComponent } from './instructors/instructors.component';
 import { InstructorstblComponent } from './instructorstbl/instructorstbl.component';
-import { ExampletblComponent } from './exampletbl/exampletbl.component';
+//import { ExampletblComponent } from './exampletbl/exampletbl.component';
 import { LoginComponent } from './auth/login.component';
-import { importType } from '@angular/compiler/src/output/output_ast';
-import { CommonInterceptor } from './common.interceptor'
+//import { importType } from '@angular/compiler/src/output/output_ast';
+//import { CommonInterceptor } from './common.interceptor'
 import { JwtInterceptor } from './auth/jwt.interceptor'
-import { ErrorInterceptor } from './auth/error.interceptor'
-import { CookieService } from './cookie.service';
+//import { ErrorInterceptor } from './auth/error.interceptor'
+import { CookieServer } from './cookie.service';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -52,21 +52,21 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     AppComponent,
     NavComponent,
     InstructorComponent,
-    InstructorsComponent,
+    //InstructorsComponent,
     SidebarComponent,
     InstructorstblComponent,
-    ExampletblComponent,
+    //ExampletblComponent,
     LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule,
+    //FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpClientJsonpModule,
-    LayoutModule,
+    //HttpClientJsonpModule,
+    //LayoutModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -86,7 +86,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     //{ provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true },
     //{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    CookieService,
+    CookieServer,
     { provide: 'req', useValue: null}
   ],
   bootstrap: [AppComponent]
