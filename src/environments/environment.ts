@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //apiUrl: '/api/'
-  apiUrl: 'https://app108060.1capp.net/Avtoshkola/hs/'
+  apiUrl: '/api/'
+  //apiUrl: 'https://app108060.1capp.net/Avtoshkola/hs/'
 };
 
 /*

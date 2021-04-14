@@ -125,7 +125,7 @@ export class InstructorsService {
   }
 
   getAllInstructors() : Observable<InstructorsInfo> {
-    if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId) && this.transferState.hasKey(INSTRS_KEY)) {
       //if (this.transferState.hasKey(INSTRS_KEY)) {
         //const instrs = this.transferState.get(INSTRS_KEY, null);
         //this.transferState.remove(INSTRS_KEY);
@@ -139,7 +139,7 @@ export class InstructorsService {
       //return this.http.get('/api/Instructors/GetInstructors').pipe(
       //return this.http.get('https://app108060.1capp.net/Avtoshkola/hs/Instructors/GetInstructors').pipe(
       //let instrUrl = environment.apiUrl + 'Instructors/GetInstructors';
-      this.transferState.set(INSTRS_KEY, null);
+      if (isPlatformServer(this.platformId)) this.transferState.set(INSTRS_KEY, null);
       return this.http.get(`${environment.apiUrl}Instructors/GetInstructors`).pipe(
         map((data:any) => {
           //let instructorsList = data["instructors"];
@@ -163,10 +163,10 @@ export class InstructorsService {
           };
         }),
         tap(instr => {
-          //if (isPlatformServer(this.platformId)) {
+          if (isPlatformServer(this.platformId)) {
               this.transferState.set(INSTRS_KEY, instr);
               console.log("Запрос от сервера: $instr");
-          //}
+          }
         })
       );
     }

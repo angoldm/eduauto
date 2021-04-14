@@ -45,7 +45,7 @@ export class AuthenticationService {
             //user.token = this.getCookie('currentUserToken');
             user.token = this.cookieServer.get('currentUserToken');
             console.log(`Server currentUserToken = ${user.token}`);
-        }
+        } else user.token = localStorage.getItem("currentUserToken");
         //let currentUser:User = isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('currentUser')) : user;
         let currentUser = user;
         /*let currentUserCookie = this.cookieService.get('currentUser');
