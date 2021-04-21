@@ -110,6 +110,7 @@ export class InstructorstblComponent implements AfterViewInit, OnInit, OnDestroy
       console.log(data);
     })*/
     //this.dataSource = new InstructorstblDataSource(this.instrService);
+    /*Перезагрузка страницы, если нет TransferState от сервера
     if (this.instrService.getTransferState() == null) {
       if (isPlatformServer(this.platformId)){
         //location.reload();
@@ -122,6 +123,7 @@ export class InstructorstblComponent implements AfterViewInit, OnInit, OnDestroy
         localStorage.removeItem('Instructors_reloaded');
       }
     }
+    */
   }
 
   ngOnDestroy(){

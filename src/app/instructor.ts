@@ -1,12 +1,12 @@
 export interface Instructor {
-    id: number;
+    id: string;
     name: string;
     surname: string;
     experience: number;
     license?: string;
-    brand?: string;
+    mark?: string;
     model?: string;
-    autotransmission?: boolean;
+    transmission?: string;
     statenumber?: string;
     school?: string;
 }

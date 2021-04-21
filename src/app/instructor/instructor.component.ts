@@ -54,7 +54,7 @@ export class InstructorComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     //const id = +this.route.snapshot.params['id']
-    const id = +this.route.params['id']
+    const id = this.route.snapshot.params['id']
     this.instrService.getInstructor(id)
       .subscribe((instr: Instructor) => {
         this.instructor = instr;

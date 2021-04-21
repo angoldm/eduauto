@@ -32,8 +32,8 @@ export class AuthenticationService {
     ) {
         //let currentUserJSON = isPlatformBrowser(this.platformId) ? localStorage.getItem('currentUser') : request.http.cookie
         let user: User = {
-            username: 'test',
-            password: 'test',
+            username: '',
+            //password: 'test',
             fio: '',
             token: ''
         };
@@ -45,7 +45,11 @@ export class AuthenticationService {
             //user.token = this.getCookie('currentUserToken');
             user.token = this.cookieServer.get('currentUserToken');
             console.log(`Server currentUserToken = ${user.token}`);
-        } else user.token = localStorage.getItem("currentUserToken");
+        } else {
+            if (localStorage["currentUser"] != null)
+                user = JSON.parse(localStorage["currentUser"]);
+            //user.token = localStorage["currentUserToken"] || '';
+        }
         //let currentUser:User = isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('currentUser')) : user;
         let currentUser = user;
         /*let currentUserCookie = this.cookieService.get('currentUser');
@@ -56,14 +60,14 @@ export class AuthenticationService {
     }
 
     public get currentUserValue(): User {
-        //return this.currentUserSubject.value;
-        return this.currentUserInfo;
+        return this.currentUserSubject.value;
+        //return this.currentUserInfo;
     }
 
     login(username: string, password: string) {
         //RegistryClient/RegClient
         if (this.transferState.hasKey(AUTH_KEY)) {
-            let authdata = this.transferState.get(AUTH_KEY, null);
+            let authdata = this.transferState.get<string>(AUTH_KEY, null);
             let user = JSON.parse(authdata)
             localStorage.setItem('currentUser', authdata);
             this.currentUserSubject.next(user);
@@ -78,21 +82,20 @@ export class AuthenticationService {
                 }
                 return user;
             }));*/
-            let fio = `${username}:${password}`;
+            //let fio = `${username}:${password}`;
             let token = btoa(`${username}:${password}`);
             let user: User = {
                 username: username,
-                password: password,
-                fio: fio,
+                //password: password,
+                //fio: fio,
                 token: token
             };
             localStorage.setItem('currentUser', JSON.stringify(user));
-            localStorage.setItem('currentUserToken', user.token);
-            this.transferState.set(AUTH_KEY, JSON.stringify(user));
+            //localStorage.setItem('currentUserToken', user.token);
+            /*this.transferState.set(AUTH_KEY, JSON.stringify(user));
             this.cookieService.set('currentUser', JSON.stringify(user));
-            //this.cookieService.set('currentUserToken', user.token);
             this.cookieServer.set('currentUserToken', user.token);
-            this.currentUserSubject.next(user);
+            this.currentUserSubject.next(user);*/
             return of(user);
         }
     }

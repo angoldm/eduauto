@@ -1,23 +1,24 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import {forkJoin, Observable, of} from 'rxjs';
+import { map, tap, mergeMap, mergeAll } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 import { ThrowStmt } from '@angular/compiler';
 import { TransferState, makeStateKey } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { AvtoschoolsService } from '../avtoschools.service'
 
-const INSTRS_KEY = makeStateKey('instructors');
+const INSTRS_KEY = makeStateKey<any>('instructors');//можно попробовать типизировать
 
 export interface InstructorstblItem {
   name: string;
-  id: number;
+  id: string;
   surname: string;
   experience: number;
   license: string;
-  brand: string;
+  mark: string;
   model: string;
-  autotransmission: boolean;
+  transmission: string;
   statenumber: string;
   school: string;
   city: string;
@@ -37,7 +38,15 @@ export class InstructorsService {
   order: string;
   constructor(private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId,
-    private transferState: TransferState) { }
+    private transferState: TransferState,
+    private avtoschoolsService : AvtoschoolsService
+    ) {
+      /*let schools : Map<string, Avtoschool>;
+      this.getAvtoschools().subscribe(ss => ss.forEach( s =>
+        schools[s.id] = s
+      ));
+      this.Schools = schools;*/
+    }
 
 //  getInstructors() : Observable<Instructor[]> {
   getInstructors0(sort?: string, order?: string, pageIndex?: number, pageSize?: number) : Observable<InstructorsInfo> {
@@ -76,7 +85,7 @@ export class InstructorsService {
                 name: instructor.name,
                 //surname: instructor.surname,
                 experience: instructor.experience,
-                brand: "", //instructor.brand,
+                mark: "", //instructor.mark,
                 model:  "", //instructor.model,
                 autotransmission: false,
                 statenumber: "",
@@ -130,7 +139,7 @@ export class InstructorsService {
         //const instrs = this.transferState.get(INSTRS_KEY, null);
         //this.transferState.remove(INSTRS_KEY);
 
-        return of(this.transferState.get(INSTRS_KEY, null));
+        return of(this.transferState.get<InstructorsInfo>(INSTRS_KEY, null));
       /*} /*else {
         location.reload();
       }*/
@@ -140,7 +149,26 @@ export class InstructorsService {
       //return this.http.get('https://app108060.1capp.net/Avtoshkola/hs/Instructors/GetInstructors').pipe(
       //let instrUrl = environment.apiUrl + 'Instructors/GetInstructors';
       if (isPlatformServer(this.platformId)) this.transferState.set(INSTRS_KEY, null);
-      return this.http.get(`${environment.apiUrl}Instructors/GetInstructors`).pipe(
+      /*let Schools : Map<string, Avtoschool>;
+      this.getAvtoschools().subscribe(ss => ss.forEach( s =>
+        Schools[s.id] = s
+      ));*/
+      let instructors : Observable<InstructorstblItem[]> = this.http.get<InstructorstblItem[]>(`${environment.apiUrl}Instructors/GetInstructors`)
+      .pipe(
+        /*mergeMap((instr:InstructorstblItem) => forkJoin(of(instr), this.getAvtoschoolbyInstr(instr))),
+        /*map(([instr, school]) => {
+          instr.name = school;
+          return instr;
+        })*/
+        map(instrs => {
+          instrs.forEach(instr => {
+            if (instr.school)
+              instr.school = this.avtoschoolsService.getSchoolname(instr.school);
+          });
+          return instrs
+        })
+      );
+      let instructorsInfo : Observable<InstructorsInfo> = instructors.pipe(
         map((data:any) => {
           //let instructorsList = data["instructors"];
           //return instructorsList.map(function(instructor:any) {
@@ -151,11 +179,11 @@ export class InstructorsService {
                 name: instructor.name,
                 //surname: instructor.surname,
                 experience: instructor.experience,
-                brand: "", //instructor.brand,
-                model:  "", //instructor.model,
-                autotransmission: false,
+                mark: instructor.mark,
+                model: instructor.model,
+                transmission: instructor.transmission,
                 statenumber: "",
-                school: instructor.school,
+                school: instructor.school, //this.getAvtoschoolName(instructor.school),
                 city: instructor.city,
               };
             }),
@@ -167,8 +195,12 @@ export class InstructorsService {
               this.transferState.set(INSTRS_KEY, instr);
               console.log("Запрос от сервера: $instr");
           }
-        })
+        }),
       );
+      /*this.getAvtoschools().pipe(
+        mergeMap(schools => instructorsInfo.)
+      )*/
+      return instructorsInfo;
     }
   }
 
