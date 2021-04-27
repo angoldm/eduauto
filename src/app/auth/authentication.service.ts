@@ -35,7 +35,7 @@ export class AuthenticationService {
             username: '',
             //password: 'test',
             fio: '',
-            token: ''
+            token: '00000000'
         };
         if (isPlatformServer(this.platformId)) {
             //console.log(this.request.headers.cookie);
@@ -118,4 +118,8 @@ export class AuthenticationService {
     /*getCookie(key: string) {
         return !!this.cookieStore[key] ? this.cookieStore[key] : null;
     }*/
+    isAuthenticated() : boolean{
+        return (this.currentUserValue != undefined && this.currentUserValue != null && this.currentUserValue.username != "")
+      }
+
 }

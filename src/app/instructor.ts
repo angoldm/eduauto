@@ -9,4 +9,5 @@ export interface Instructor {
     transmission?: string;
     statenumber?: string;
     school?: string;
+    city: string
 }

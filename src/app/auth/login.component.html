@@ -1,18 +1,26 @@
-<form [formGroup]="loginForm" (ngSubmit)="login()">
-  <div style='float: left;'>
-    <div>
-      <mat-form-field appearance="outline">
+<div *ngIf = "!isAuthenticated()">
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <div style='float: left;'>
+      <mat-form-field>
         <mat-label>Имя пользователя</mat-label>
-          <input type="text" matInput formControlName="username" required placeholder="Логин (номер телефона)">
-          <!--input type="text" matInput [formControl]="login" required placeholder="Имя пользователя"-->
+        <input type="text" matInput formControlName="username" required placeholder="Логин (номер телефона)">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Пароль</mat-label>
+        <input matInput [type]="hidepwd ? 'password' : 'text'" formControlName="password" required placeholder="Пароль">
+        <button mat-icon-button matSuffix (click)="hidepwd = !hidepwd;" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidepwd">
+          <mat-icon>{{hidepwd ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
       </mat-form-field>
     </div>
     <div>
-      <label>Пароль</label>
-      <input type="password" formControlName="password" required placeholder="Пароль">
+      <button type="submit">Войти</button>
     </div>
-  </div>
-  <div>
-    <button type="submit">Войти</button>
-  </div>
-</form>
+  </form>
+</div>
+<div *ngIf = "isAuthenticated()">
+  <h3>Пользователь: {{currentUser.username}}</h3>
+  <form [formGroup]="logoutForm" (ngSubmit)="logout()">
+    <button type="submit">Выйти</button>
+  </form>
+</div>

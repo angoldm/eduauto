@@ -31,6 +31,7 @@ export class InstructorService {
             transmission: instr.transmission,
             statenumber: "",
             school: instr.school,
+            city: instr.city,
           };
       }),
     );
