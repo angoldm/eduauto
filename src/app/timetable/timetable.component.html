@@ -1,0 +1,25 @@
+<div>
+    <ul class="timetable">
+        <li *ngFor="let timerecord of timetable">
+            <span class="badge">{{timerecord.name}}</span> <span>{{timerecord.vid}} {{timerecord.begin}} - {{timerecord.end}}</span>
+        </li>
+    </ul>
+</div>
+<h2>
+    <label>
+        <input
+            type='checkbox'
+            [checked]='calendarVisible'
+            (change)='handleCalendarToggle()'
+        />
+        Календарь
+    </label>
+</h2>
+<div class='demo-app'>
+	<div class='demo-app-main'>
+		<full-calendar  #calendar
+			*ngIf='calendarVisible'
+			[options]="calendarOptions">
+		</full-calendar>
+	</div>
+</div>

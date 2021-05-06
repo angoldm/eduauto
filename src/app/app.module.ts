@@ -39,6 +39,8 @@ import { LoginComponent } from './auth/login.component';
 import { JwtInterceptor } from './auth/jwt.interceptor'
 //import { ErrorInterceptor } from './auth/error.interceptor'
 import { CookieServer } from './cookie.service';
+import { MessagesComponent } from './messages/messages.component';
+import { TimetableComponent } from './timetable/timetable.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -51,12 +53,14 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   declarations: [
     AppComponent,
     NavComponent,
+    MessagesComponent,
     InstructorComponent,
     //InstructorsComponent,
     SidebarComponent,
     InstructorstblComponent,
     //ExampletblComponent,
-    LoginComponent
+    LoginComponent,
+    TimetableComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

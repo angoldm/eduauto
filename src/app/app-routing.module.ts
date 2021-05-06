@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { NotFoundComponent }   from './not-found.component';
 import { ProfileComponent } from './profile.component';
+import { TimetableComponent } from './timetable/timetable.component';
 //import { InstructorComponent } from './instructor/instructor.component';
 //import { InstructorstblComponent } from './instructorstbl/instructorstbl.component';
 //import { InstructorsComponent } from './instructors/instructors.component';
@@ -29,6 +30,7 @@ const routes: Routes = [
     //{ path: 'login', component: LoginComponent },
     //{ path: 'login', redirectTo: 'https://app108060.1capp.net/Avtoshkola/hs/City/GetCity', pathMatch: 'full' },
     { path: 'contacts', redirectTo: '/', pathMatch: 'full' },
+	{ path: 'timetable', component: TimetableComponent },
     { path: '**', component: NotFoundComponent }
 ];
 

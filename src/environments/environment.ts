@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   //apiUrl: 'http://eduauto.ru/api/'
-  apiUrl: '/api/'
   //apiUrl: 'https://app108060.1capp.net/Avtoshkola/hs/'
+  apiUrl: '/api/'
 };
 
 /*

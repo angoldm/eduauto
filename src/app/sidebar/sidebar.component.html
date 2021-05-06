@@ -6,6 +6,7 @@
     <mat-toolbar>Меню</mat-toolbar>
     <mat-nav-list>
       <a routerLink="/instructors" mat-list-item href="/instructors">Инструкторы</a>
+      <a routerLink="/timetable" mat-list-item href="/timetable">Записи календаря</a>
       <a routerLink="/profile" mat-list-item href="/profile">Профиль</a>
       <!--a routerLink="/login" mat-list-item href="/login">Логин</a-->
       <!--a routerLink="/instrlist" mat-list-item href="/instrlist">Список</a-->
@@ -45,11 +46,12 @@
         mat-icon-button
         (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        <mat-icon aria-label="Side nav toggle icon">Меню</mat-icon>
       </button>
       <span><app-nav></app-nav></span>
     </mat-toolbar>
     <!-- Add Content Here -->
     <router-outlet></router-outlet>
+    <app-messages></app-messages>
   </mat-sidenav-content>
 </mat-sidenav-container>
