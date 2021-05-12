@@ -1,7 +1,7 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { merge, Observable, of } from 'rxjs';
+import { concat, merge, Observable, of } from 'rxjs';
 import { catchError, mergeMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message.service';
@@ -21,13 +21,26 @@ export class TimetableService {
   constructor(private http: HttpClient,
     private messageService: MessageService) { }
 
-  getTimetableRange(startDate: Date): Observable<Timerecord[]> {
-    startDate = new Date('2021-05-20')
-    let timetable: Observable<Timerecord[]> = this.getTimetable(startDate)
-    let date1: Date = new Date(startDate.toString())
-    date1.setDate(startDate.getDate() + 1)
-    let timetable1: Observable<Timerecord[]> = this.getTimetable(date1)
-    timetable = merge(timetable, timetable1)
+  /**
+   * 
+   * @param startDate:Date
+   * @returns Observable
+   * TODO: concatenate this merge of Observables into one Observable to get one Observable
+   */
+  getTimetableRange(startDate:Date): Observable<Timerecord[]> {
+    //startDate = new Date('2021-05-20')
+    //let timetable: Observable<Timerecord[]> = this.getTimetable(startDate)
+    let timetableNext: Observable<Timerecord[]>[] = new Array(7)
+    let nextDay: Date = new Date(startDate.toString())
+    //for (var i:number = 1; i<7; i++) {
+    for (var i:number = 0; i<7; i++) {
+      /*nextDay.setDate(nextDay.getDate() + 1)
+      let timetableNext: Observable<Timerecord[]> = this.getTimetable(nextDay)
+      timetable = merge(timetable, timetableNext)*/
+      timetableNext[i] = this.getTimetable(nextDay)
+      nextDay.setDate(nextDay.getDate() + 1)
+    }
+    let timetable = concat(timetableNext[0], timetableNext[1], timetableNext[2], timetableNext[3], timetableNext[4], timetableNext[5], timetableNext[6])
     return timetable.pipe(
       //tap(trec => this.log(`Загружено записей: ${trec.length}`)),
     );

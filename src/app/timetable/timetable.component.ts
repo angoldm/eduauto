@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Timerecord, TimetableService } from './timetable.service';
 import { FullCalendarComponent, CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/angular'; // useful for typechecking
 import { INITIAL_EVENTS, createEventId } from '../event-utils';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { MessageService } from '../message.service';
+import { formatDate } from '@angular/common';
 
 interface DateInfo {
   start: Date,
@@ -19,7 +20,7 @@ interface DateInfo {
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.scss']
 })
-export class TimetableComponent implements OnInit, AfterViewInit {
+export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   timetable: Timerecord[]
 
@@ -66,10 +67,12 @@ export class TimetableComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //this.getTimetable()
+    localStorage.setItem('isInit', '1')
   }
 
   ngAfterViewInit(){
     this.calendarApi = this.calendarComponent.getApi();
+    this.calendarApi.gotoDate(localStorage.getItem('timetabeStart'))
     //this.calendarDate = this.calendarApi.view.currentStart;
   }
   getTimetable(satartDate: Date): void {
@@ -128,8 +131,16 @@ export class TimetableComponent implements OnInit, AfterViewInit {
    * @param view      The current View Object. 
    */
   handleDates(dateInfo: DateInfo) {
-    this.calendarDate = dateInfo.start
-    this.getTimetable(dateInfo.start)
+    if (localStorage.getItem('isInit') == null) {
+      this.calendarDate = dateInfo.start
+      this.getTimetable(dateInfo.start)
+      localStorage.setItem('timetabeStart', formatDate(dateInfo.start, 'YYYY-MM-dd', 'en-US'))
+    } else localStorage.removeItem('isInit')
+    //localStorage.setItem('timetabeStart', formatDate(this.calendarApi.getDate(), 'YYYY-MM-dd', 'en-US'))
+  }
+
+  ngOnDestroy(): void {
+    //localStorage.setItem('timetabeStart', localStorage.getItem('calendarStart'))  //не работает
   }
 
 }
