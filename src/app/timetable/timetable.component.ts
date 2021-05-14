@@ -28,6 +28,7 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
 
+  currentEvents: EventApi[] = [];
   calendarOptions: CalendarOptions = {
     headerToolbar: {
       left: 'prev,next today',
@@ -51,7 +52,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
       week: 'неделя',
       day: 'день',
       list: 'записи'
-    }
+    },
+    events: this.currentEvents
     /* you can update a remote database when these fire:
     eventAdd:
     eventChange:
@@ -59,7 +61,6 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
     */
   };
 
-  currentEvents: EventApi[] = [];
   calendarDate: Date;
   calendarApi: any;
 
@@ -72,7 +73,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   ngAfterViewInit(){
     this.calendarApi = this.calendarComponent.getApi();
-    this.calendarApi.gotoDate(localStorage.getItem('timetabeStart'))
+    if (localStorage.getItem('timetabeStart'))
+      this.calendarApi.gotoDate(localStorage.getItem('timetabeStart'))
     //this.calendarDate = this.calendarApi.view.currentStart;
   }
   getTimetable(satartDate: Date): void {
@@ -81,6 +83,15 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
       .subscribe(timetable => {
         //this.messageService.add(`Загружена ${timetable[0].name}`)
         this.timetable = this.timetable.concat(timetable)
+        this.calendarOptions.events = this.timetable.map(timetable => {
+          return {
+            id: createEventId(),
+            title: `${timetable.name} ${timetable.vid}`,
+            start: timetable.begin,
+            end: timetable.end,
+            allDay: false
+          }
+        })
       })
   }
 

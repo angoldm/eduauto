@@ -2,7 +2,7 @@ import { DatePipe, formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { concat, merge, Observable, of } from 'rxjs';
-import { catchError, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message.service';
 
@@ -55,7 +55,15 @@ export class TimetableService {
     return this.http.get<Timerecord[]>(`${environment.apiUrl}Timetable/GetTime?Instructor=aa2b4b99-f3c6-11e9-b7f1-d6d62339e3ad&Date=${dateRecStr}&Login=+7(917)2222222&Parol=1`)
     .pipe(
       //tap(trec => this.log(`Загружено записей: ${trec.length}`)),
-      catchError(this.handleError<Timerecord[]>('Не загружены.', []))
+      catchError(this.handleError<Timerecord[]>('Не загружены.', [])),
+      map((records:Timerecord[]) => records.map((rec:any) => {
+        return {
+          begin: this.getDatefromStr(rec.begin),
+          end: this.getDatefromStr(rec.end),
+          name: rec.name,
+          vid: rec.vid
+        }
+      }))
     );
   }
 
@@ -80,6 +88,14 @@ export class TimetableService {
   }
   private log(message: string) {
     this.messageService.add(`Записи календаря инструктора: ${message}`);
+  }
+
+  getDatefromStr(strDate:string): Date{
+    let year = strDate.substr(6, 4);
+    let month = strDate.substr(3, 2);
+    let day = strDate.substr(0, 2);
+    let time = strDate.substr(11, 8);
+    return new Date(`${year}-${month}-${day}T${time}`)
   }
 
 }
