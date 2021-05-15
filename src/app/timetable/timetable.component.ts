@@ -42,6 +42,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
     selectMirror: true,
     dayMaxEvents: true,
     locale: ruLocale,
+    slotMinTime: "07:00:00",
+    slotMaxTime: "23:00:00",
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
