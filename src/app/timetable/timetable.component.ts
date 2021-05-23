@@ -29,7 +29,9 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
 
   currentEvents: EventApi[] = [];
-  calendarOptions: CalendarOptions = {
+  initialDate: Date = new Date(localStorage.getItem('timetabeStart') ? localStorage.getItem('timetabeStart') : Date());
+
+    calendarOptions: CalendarOptions = {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
@@ -55,7 +57,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
       day: 'день',
       list: 'записи'
     },
-    events: this.currentEvents
+    events: this.currentEvents,
+    initialDate: this.initialDate
     /* you can update a remote database when these fire:
     eventAdd:
     eventChange:
@@ -70,21 +73,50 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   ngOnInit(): void {
     //this.getTimetable()
-    localStorage.setItem('isInit', '1')
+    //localStorage.setItem('isInit', '1')
+    /*const timetabeStart = localStorage.getItem('timetabeStart')
+    if (timetabeStart)
+      this.initialDate = new Date(timetabeStart)
+    else
+      this.initialDate = new Date()*/
   }
 
   ngAfterViewInit(){
     this.calendarApi = this.calendarComponent.getApi();
-    if (localStorage.getItem('timetabeStart'))
-      this.calendarApi.gotoDate(localStorage.getItem('timetabeStart'))
+    /*const timetabeStart = localStorage.getItem('timetabeStart')
+    if (timetabeStart)
+      this.calendarApi.gotoDate(timetabeStart)*/
+    //let calDate = this.calendarApi.getDate()
     //this.calendarDate = this.calendarApi.view.currentStart;
   }
+
+  /** Вызывается при смене видимого диапазона дат (напр., в режиме неделя - смена надели) и при обновлении страницы!
+   * @param dateInfo: DateInfo - members:
+   * @param start  A Date for the beginning of the range the calendar needs events for.
+   * @param end       A Date for the end of the range the calendar needs events for. Note: This value is exclusive.
+   * @param startStr  An ISO8601 string representation of the start date. Will have a time zone offset according to the calendar’s timeZone like 2018-09-01T12:30:00-05:00.
+   * @param endStr    Just like startStr, but for the end date.
+   * @param timeZone  The exact value of the calendar’s timeZone setting.
+   * @param view      The current View Object. 
+   */
+   handleDates(dateInfo: DateInfo) {
+    //if (localStorage.getItem('isInit') == null) {
+      this.calendarDate = dateInfo.start
+      this.getTimetable(dateInfo.start)
+      localStorage.setItem('timetabeStart', formatDate(dateInfo.start, 'YYYY-MM-dd', 'en-US'))
+    //} else localStorage.removeItem('isInit')
+    //localStorage.setItem('timetabeStart', formatDate(this.calendarApi.getDate(), 'YYYY-MM-dd', 'en-US'))
+  }
+
   getTimetable(satartDate: Date): void {
     this.timetable = []
     this.timetableService.getTimetableRange(satartDate)
       .subscribe(timetable => {
         //this.messageService.add(`Загружена ${timetable[0].name}`)
-        this.timetable = this.timetable.concat(timetable)
+        this.timetable = this.timetable.concat(timetable[0])
+        timetable.forEach(t => {
+          this.timetable = this.timetable.concat(t)
+        });
         this.calendarOptions.events = this.timetable.map(timetable => {
           return {
             id: createEventId(),
@@ -132,24 +164,6 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   handleEvents(events: EventApi[]) {
     this.currentEvents = events;
-    //let calendarApi = this.calendarComponent.getApi();
-    //this.calendarDate = calendarApi.getDate()
-  }
-  /**
-   * @param start  A Date for the beginning of the range the calendar needs events for.
-   * @param end       A Date for the end of the range the calendar needs events for. Note: This value is exclusive.
-   * @param startStr  An ISO8601 string representation of the start date. Will have a time zone offset according to the calendar’s timeZone like 2018-09-01T12:30:00-05:00.
-   * @param endStr    Just like startStr, but for the end date.
-   * @param timeZone  The exact value of the calendar’s timeZone setting.
-   * @param view      The current View Object. 
-   */
-  handleDates(dateInfo: DateInfo) {
-    if (localStorage.getItem('isInit') == null) {
-      this.calendarDate = dateInfo.start
-      this.getTimetable(dateInfo.start)
-      localStorage.setItem('timetabeStart', formatDate(dateInfo.start, 'YYYY-MM-dd', 'en-US'))
-    } else localStorage.removeItem('isInit')
-    //localStorage.setItem('timetabeStart', formatDate(this.calendarApi.getDate(), 'YYYY-MM-dd', 'en-US'))
   }
 
   ngOnDestroy(): void {

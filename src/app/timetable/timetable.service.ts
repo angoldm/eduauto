@@ -1,8 +1,8 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { concat, merge, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { concat, forkJoin, merge, Observable, of } from 'rxjs';
+import { buffer, catchError, concatAll, filter, map, mergeMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message.service';
 
@@ -27,21 +27,23 @@ export class TimetableService {
    * @returns Observable
    * TODO: concatenate this merge of Observables into one Observable to get one Observable
    */
-  getTimetableRange(startDate:Date): Observable<Timerecord[]> {
+  getTimetableRange(startDate:Date): Observable<Timerecord[][]> {
     //startDate = new Date('2021-05-20')
     //let timetable: Observable<Timerecord[]> = this.getTimetable(startDate)
-    let timetableNext: Observable<Timerecord[]>[] = new Array(7)
+    let timetables: Observable<Timerecord[]>[] = new Array(7)
     let nextDay: Date = new Date(startDate.toString())
     //for (var i:number = 1; i<7; i++) {
     for (var i:number = 0; i<7; i++) {
       /*nextDay.setDate(nextDay.getDate() + 1)
       let timetableNext: Observable<Timerecord[]> = this.getTimetable(nextDay)
       timetable = merge(timetable, timetableNext)*/
-      timetableNext[i] = this.getTimetable(nextDay)
+      timetables[i] = this.getTimetable(nextDay)
       nextDay.setDate(nextDay.getDate() + 1)
     }
-    let timetable = concat(timetableNext[0], timetableNext[1], timetableNext[2], timetableNext[3], timetableNext[4], timetableNext[5], timetableNext[6])
-    return timetable.pipe(
+    //let timetable = concat(timetableNext[0], timetableNext[1], timetableNext[2], timetableNext[3], timetableNext[4], timetableNext[5], timetableNext[6])
+    return forkJoin(timetables)
+    .pipe(
+      //concatAll()//превращает в тип Observable<Timerecord>
       //tap(trec => this.log(`Загружено записей: ${trec.length}`)),
     );
   }
