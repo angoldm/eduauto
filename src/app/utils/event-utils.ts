@@ -3,6 +3,15 @@ import { EventInput } from '@fullcalendar/angular';
 let eventGuid = 0;
 const TODAY_STR = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
 
+export interface DateInfo {
+  start: Date,
+  end: Date,
+  startStr: string,
+  endStr: string,
+  timeZone: string,
+  view: string
+}
+
 export const INITIAL_EVENTS: EventInput[] = [
   {
     id: createEventId(),

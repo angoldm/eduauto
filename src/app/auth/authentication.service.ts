@@ -31,11 +31,12 @@ export class AuthenticationService {
         //@Optional() @Inject(REQUEST) private request: Request,
     ) {
         //let currentUserJSON = isPlatformBrowser(this.platformId) ? localStorage.getItem('currentUser') : request.http.cookie
+        let token = btoa(`test:test`)   //token стандартный для всех юзеров
         let user: User = {
             username: '',
             //password: 'test',
-            fio: '',
-            token: '00000000'
+            //fio: '',
+            token: token
         };
         if (isPlatformServer(this.platformId)) {
             //console.log(this.request.headers.cookie);
@@ -43,12 +44,13 @@ export class AuthenticationService {
             //console.log(this.cookieStore);
             //console.log(this.getCookie('currentUser'));
             //user.token = this.getCookie('currentUserToken');
-            user.token = this.cookieServer.get('currentUserToken');
-            console.log(`Server currentUserToken = ${user.token}`);
+            //user.token = this.cookieServer.get('currentUserToken');//token стандартный test:test
+            //console.log(`Server currentUserToken = ${user.token}`);
         } else {
-            if (localStorage["currentUser"] != null)
+            if (localStorage["currentUser"] != null) {
                 user = JSON.parse(localStorage["currentUser"]);
-            //user.token = localStorage["currentUserToken"] || '';
+                user.token = token //переприсвоение на случай смены общей аутентификации (test:test)
+             } else localStorage.setItem('currentUser', JSON.stringify(user));
         }
         //let currentUser:User = isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('currentUser')) : user;
         let currentUser = user;
@@ -83,13 +85,18 @@ export class AuthenticationService {
                 return user;
             }));*/
             //let fio = `${username}:${password}`;
-            let token = btoa(`${username}:${password}`);
-            let user: User = {
+            //let token = btoa(`${username}:${password}`);
+            //let token = btoa(`test:test`);
+            let user = this.currentUserValue
+            user.username = username
+            user.password = password
+            /*let user: User = {
                 username: username,
-                //password: password,
+                password: password,
                 //fio: fio,
                 token: token
-            };
+            };*/
+
             localStorage.setItem('currentUser', JSON.stringify(user));
             //localStorage.setItem('currentUserToken', user.token);
             /*this.transferState.set(AUTH_KEY, JSON.stringify(user));
@@ -102,7 +109,11 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+        let user = this.currentUserValue
+        user.username = ''
+        user.password = ''
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        //localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
     /*public parseCookies(cookies) {

@@ -8,16 +8,28 @@
 	<p>Коробка передач: {{instructor.transmission}}</p>
 </div>
 
-	<h2>График
-		<label>
-			<input
-			  type='checkbox'
-			  [checked]='calendarVisible'
-			  (change)='handleCalendarToggle()'
-			/>
-			Календарь
-	  </label>
-	</h2>
+<h2>Записи ({{currentEvents.length}}):</h2>
+<ul>
+	<!--li *ngFor='let event of currentEvents'>
+		<b>{{event.startStr}}</b>
+		<i>{{event.title}}</i>
+	</li-->
+	<li *ngFor='let timerecord of timetable'>
+		<b>{{timerecord.vid}}</b> <i>"{{timerecord.name}}"</i>: {{timerecord.begin | date:'dd.MM.yyyy HH:mm'}} - {{timerecord.end | date:'HH:mm'}}
+	</li>
+</ul>
+
+<h2>
+	<label>
+		<input
+			type='checkbox'
+			[checked]='calendarVisible'
+			(change)='handleCalendarToggle()'
+		/>
+		Календарь
+	</label>
+</h2>
+
 <div class='demo-app'>
 	<div class='demo-app-main'>
 		<full-calendar
@@ -26,10 +38,3 @@
 		</full-calendar>
 	</div>
 </div>
-<h2>Поездки ({{currentEvents.length}}):</h2>
-<ul>
-  <li *ngFor='let event of currentEvents'>
-	<b>{{event.startStr}}</b>
-	<i>{{event.title}}</i>
-  </li>
-</ul>

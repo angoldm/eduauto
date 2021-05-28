@@ -21,10 +21,14 @@ export class JwtInterceptor implements HttpInterceptor {
                 setHeaders: {
                     Authorization: `Basic ${currentUser.token}`,
                     'Accept-Charset': 'utf-8'
+                },
+                setParams: {
+                    Login: currentUser.username,
+                    Parol: currentUser.password
                 }
             });
         }
-        console.log(`currentUser.token = ${currentUser.token}`);
+        //console.log(`currentUser.token = ${currentUser.token}`);
 
         return next.handle(request);
     }

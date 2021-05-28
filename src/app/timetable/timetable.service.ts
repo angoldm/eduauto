@@ -5,6 +5,7 @@ import { concat, forkJoin, merge, Observable, of } from 'rxjs';
 import { buffer, catchError, concatAll, filter, map, mergeMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message.service';
+import { getDatefromStr, handleError } from '../utils/api-utils';
 
 export interface Timerecord {
   begin: Date,
@@ -25,9 +26,8 @@ export class TimetableService {
    * 
    * @param startDate:Date
    * @returns Observable
-   * TODO: concatenate this merge of Observables into one Observable to get one Observable
    */
-  getTimetableRange(startDate:Date): Observable<Timerecord[][]> {
+  getTimetableRange(startDate:Date, instructorId:string): Observable<Timerecord[][]> {
     //startDate = new Date('2021-05-20')
     //let timetable: Observable<Timerecord[]> = this.getTimetable(startDate)
     let timetables: Observable<Timerecord[]>[] = new Array(7)
@@ -37,7 +37,7 @@ export class TimetableService {
       /*nextDay.setDate(nextDay.getDate() + 1)
       let timetableNext: Observable<Timerecord[]> = this.getTimetable(nextDay)
       timetable = merge(timetable, timetableNext)*/
-      timetables[i] = this.getTimetable(nextDay)
+      timetables[i] = this.getTimetable(nextDay, instructorId)
       nextDay.setDate(nextDay.getDate() + 1)
     }
     //let timetable = concat(timetableNext[0], timetableNext[1], timetableNext[2], timetableNext[3], timetableNext[4], timetableNext[5], timetableNext[6])
@@ -48,20 +48,20 @@ export class TimetableService {
     );
   }
   
-  getTimetable(dateRec:Date): Observable<Timerecord[]> {
+  getTimetable(dateRec:Date, instructorId:string): Observable<Timerecord[]> {
     let dateRecStr: string = formatDate(dateRec, 'YYYYMMdd', 'en-US')
     //dateRecStr = '20210521'
     /*const datepipe: DatePipe = new DatePipe('en-US')
     let dateRecStr: string = datepipe.transform(dateRec, 'YYYYMMdd')*/
     //let start: string = `${satartDate.getFullYear()}${satartDate.getMonth()}${satartDate.getDate()}`
-    return this.http.get<Timerecord[]>(`${environment.apiUrl}Timetable/GetTime?Instructor=aa2b4b99-f3c6-11e9-b7f1-d6d62339e3ad&Date=${dateRecStr}&Login=+7(917)2222222&Parol=1`)
+    return this.http.get<Timerecord[]>(`${environment.apiUrl}Timetable/GetTime?Instructor=${instructorId}&Date=${dateRecStr}`)  //&Login=${login}&Parol=${password}
     .pipe(
       //tap(trec => this.log(`Загружено записей: ${trec.length}`)),
-      catchError(this.handleError<Timerecord[]>('Не загружены.', [])),
+      catchError(this.handleError<Timerecord[]>('Записи календаря инструктора: Не загружены.', [])),
       map((records:Timerecord[]) => records.map((rec:any) => {
         return {
-          begin: this.getDatefromStr(rec.begin),
-          end: this.getDatefromStr(rec.end),
+          begin: getDatefromStr(rec.begin),
+          end: getDatefromStr(rec.end),
           name: rec.name,
           vid: rec.vid
         }
@@ -88,16 +88,9 @@ export class TimetableService {
       return of(result as T);
     };
   }
-  private log(message: string) {
-    this.messageService.add(`Записи календаря инструктора: ${message}`);
-  }
 
-  getDatefromStr(strDate:string): Date{
-    let year = strDate.substr(6, 4);
-    let month = strDate.substr(3, 2);
-    let day = strDate.substr(0, 2);
-    let time = strDate.substr(11, 8);
-    return new Date(`${year}-${month}-${day}T${time}`)
+  private log(message: string) {
+    this.messageService.add(`${message}`);
   }
 
 }

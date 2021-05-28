@@ -1,7 +1,7 @@
 <div>
     <ul class="timetable">
-        <li *ngFor="let timerecord of timetable">
-            <span class="badge">{{timerecord.name}}</span> <span>{{timerecord.vid}} {{timerecord.begin | date:'dd.MM.yyyy HH:mm'}} - {{timerecord.end | date:'dd.MM.yyyy HH:mm'}}</span>
+        <li *ngFor="let req of reqstatus">
+            <span class="badge">{{req.vid}}</span> <span>{{req.begin | date:'dd.MM.yyyy HH:mm'}} - {{req.end | date:'dd.MM.yyyy HH:mm'}}</span>
         </li>
     </ul>
 </div>

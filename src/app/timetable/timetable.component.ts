@@ -1,19 +1,12 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Timerecord, TimetableService } from './timetable.service';
 import { FullCalendarComponent, CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/angular'; // useful for typechecking
-import { INITIAL_EVENTS, createEventId } from '../event-utils';
+import { INITIAL_EVENTS, createEventId, DateInfo } from '../utils/event-utils';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { MessageService } from '../message.service';
 import { formatDate } from '@angular/common';
-
-interface DateInfo {
-  start: Date,
-  end: Date,
-  startStr: string,
-  endStr: string,
-  timeZone: string,
-  view: string
-}
+import { AuthenticationService } from '../auth/authentication.service';
+import { ReqStatus, ReqStatusService } from '../req-status/req-status.service';
 
 @Component({
   selector: 'timetable',
@@ -23,6 +16,7 @@ interface DateInfo {
 export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   timetable: Timerecord[]
+  reqstatus: ReqStatus[]
 
   calendarVisible = true;
 
@@ -69,7 +63,10 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
   calendarDate: Date;
   calendarApi: any;
 
-  constructor(private timetableService: TimetableService, private messageService: MessageService) { }
+  constructor(private timetableService: TimetableService,
+    private reqStatusService: ReqStatusService,
+    private authenticationService: AuthenticationService, 
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
     //this.getTimetable()
@@ -102,15 +99,35 @@ export class TimetableComponent implements OnInit, AfterViewInit, OnDestroy  {
    handleDates(dateInfo: DateInfo) {
     //if (localStorage.getItem('isInit') == null) {
       this.calendarDate = dateInfo.start
-      this.getTimetable(dateInfo.start)
+      //this.getTimetable(dateInfo.start)
+      this.updateReqStatus()
       localStorage.setItem('timetabeStart', formatDate(dateInfo.start, 'YYYY-MM-dd', 'en-US'))
     //} else localStorage.removeItem('isInit')
     //localStorage.setItem('timetabeStart', formatDate(this.calendarApi.getDate(), 'YYYY-MM-dd', 'en-US'))
   }
 
+  updateReqStatus(): void {
+    //this.reqstatus = []
+    this.reqStatusService.getReqStatus()
+      .subscribe(reqstatus => {
+        //this.messageService.add(`Загружена ${timetable[0].name}`)
+        this.reqstatus = reqstatus;
+        this.calendarOptions.events = reqstatus.map(reqstatus => {
+          return {
+            id: createEventId(),
+            title: reqstatus.vid,
+            start: reqstatus.begin,
+            end: new Date(reqstatus.begin.setHours(reqstatus.begin.getHours()+2)), //найти конец занятия
+            allDay: false
+          }
+        })
+      })
+  }
+
   getTimetable(satartDate: Date): void {
     this.timetable = []
-    this.timetableService.getTimetableRange(satartDate)
+    this.timetableService.getTimetableRange(satartDate, 'aa2b4b99-f3c6-11e9-b7f1-d6d62339e3ad'
+    )
       .subscribe(timetable => {
         //this.messageService.add(`Загружена ${timetable[0].name}`)
         this.timetable = this.timetable.concat(timetable[0])
